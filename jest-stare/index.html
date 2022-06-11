@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>jest-stare!</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="css/diff2html.min.css" rel="stylesheet" type="text/css">
+    <link href="css/jest-stare.css" rel="stylesheet" type="text/css">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/holder.js"></script>
+    <script src="js/diff2html.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/view.js"></script>
+</head>
+
+<body>
+    <header>
+        <!-- Fixed navbar -->
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <a class="navbar-brand" id="navbar-title" href="#">jest-stare</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="coverage-link" class="nav-link disabled" href="#">Coverage</a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="onoff-switch mr-sm-2 ml-sm-2">
+                            <input type="checkbox" name="off-switch" class="off-switch-checkbox" id="lab-passoff-switch" checked>
+                            <label class="onoff-switch-label" for="lab-passoff-switch">
+                                <span class="pass off-switch-inner"></span>
+                                <span class="off-switch-switch"></span>
+                            </label>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="onoff-switch mr-sm-2 ml-sm-2">
+                            <input type="checkbox" name="off-switch" class="off-switch-checkbox" id="lab-failoff-switch" checked>
+                            <label class="onoff-switch-label" for="lab-failoff-switch">
+                                <span class="fail off-switch-inner"></span>
+                                <span class="off-switch-switch"></span>
+                            </label>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="onoff-switch mr-sm-2 ml-sm-2">
+                            <input type="checkbox" name="off-switch" class="off-switch-checkbox" id="lab-pendingoff-switch" checked>
+                            <label class="onoff-switch-label" for="lab-pendingoff-switch">
+                                <span class="pending off-switch-inner"></span>
+                                <span class="off-switch-switch"></span>
+                            </label>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="onoff-switch mr-sm-2 ml-sm-2">
+                            <input type="checkbox" name="off-switch" class="off-switch-checkbox" id="lab-todooff-switch" checked>
+                            <label class="onoff-switch-label" for="lab-todooff-switch">
+                                <span class="todo off-switch-inner"></span>
+                                <span class="off-switch-switch"></span>
+                            </label>
+                        </div>
+                    </li>
+                </ul>
+                <!-- <form class="form-inline mt-2 mt-md-0">
+                    <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" disabled>
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" disabled>Search</button>
+                </form> -->
+            </div>
+        </nav>
+    </header>
+
+    <!-- Begin page content -->
+    <main role="main" class="container">
+
+        <h1 class="mt-5"></h1>
+
+        <!-- Three columns of text below the carousel -->
+        <div class="row">
+            <div class="col-lg-4">
+                <canvas id="test-suites-canvas" width="100" height="100"></canvas>
+                <h2>Test Suites</h2>
+                <div class="list-group">
+                    <p id="test-suites-results" class="list-group-item list-group-item-action">1 passed, 3 total</p>
+                </div>
+            </div>
+            <!-- /.col-lg-4 -->
+            <div class="col-lg-4">
+                <canvas id="tests-canvas" width="100" height="100"></canvas>
+                <h2>Tests</h2>
+                <div class="list-group">
+                    <p id="tests-results" class="list-group-item list-group-item-action">1 passed, 3 total</p>
+                </div>
+            </div>
+            <!-- /.col-lg-4 -->
+            <div class="col-lg-4" id="snapshots-group">
+                <canvas id="snapshots-canvas" width="100" height="100"></canvas>
+                <h2>Snapshots</h2>
+                <div class="list-group">
+                    <p id="snapshots-results" class="list-group-item list-group-item-action">0 passed, 0 total</p>
+                </div>
+            </div>
+            <!-- /.col-lg-4 -->
+        </div>
+
+        <div id="loading-info" class="progress">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0"
+                aria-valuemax="100" style="width: 100%"></div>
+        </div>
+
+        <div class="d-none" id="test-summary"></div>
+        <div class="d-none" id="test-config">{
+  &quot;additionalResultsProcessors&quot;: [],
+  &quot;resultDir&quot;: &quot;.&#x2F;jest-stare&#x2F;&quot;,
+  &quot;resultHtml&quot;: &quot;index.html&quot;,
+  &quot;resultJson&quot;: &quot;jest-results.json&quot;
+}</div>
+        <div id="accordion">
+            <div class="d-none" id="test-results">{
+  &quot;numFailedTestSuites&quot;: 2,
+  &quot;numFailedTests&quot;: 2,
+  &quot;numPassedTestSuites&quot;: 1,
+  &quot;numPassedTests&quot;: 1,
+  &quot;numPendingTestSuites&quot;: 0,
+  &quot;numPendingTests&quot;: 0,
+  &quot;numRuntimeErrorTestSuites&quot;: 0,
+  &quot;numTodoTests&quot;: 0,
+  &quot;numTotalTestSuites&quot;: 3,
+  &quot;numTotalTests&quot;: 3,
+  &quot;openHandles&quot;: [],
+  &quot;snapshot&quot;: {
+    &quot;added&quot;: 0,
+    &quot;didUpdate&quot;: false,
+    &quot;failure&quot;: false,
+    &quot;filesAdded&quot;: 0,
+    &quot;filesRemoved&quot;: 0,
+    &quot;filesRemovedList&quot;: [],
+    &quot;filesUnmatched&quot;: 0,
+    &quot;filesUpdated&quot;: 0,
+    &quot;matched&quot;: 0,
+    &quot;total&quot;: 0,
+    &quot;unchecked&quot;: 0,
+    &quot;uncheckedKeysByFile&quot;: [],
+    &quot;unmatched&quot;: 0,
+    &quot;updated&quot;: 0
+  },
+  &quot;startTime&quot;: 1654965670187,
+  &quot;success&quot;: false,
+  &quot;testResults&quot;: [
+    {
+      &quot;leaks&quot;: false,
+      &quot;numFailingTests&quot;: 1,
+      &quot;numPassingTests&quot;: 0,
+      &quot;numPendingTests&quot;: 0,
+      &quot;numTodoTests&quot;: 0,
+      &quot;openHandles&quot;: [],
+      &quot;perfStats&quot;: {
+        &quot;end&quot;: 1654965675931,
+        &quot;runtime&quot;: 5467,
+        &quot;slow&quot;: true,
+        &quot;start&quot;: 1654965670464
+      },
+      &quot;skipped&quot;: false,
+      &quot;snapshot&quot;: {
+        &quot;added&quot;: 0,
+        &quot;fileDeleted&quot;: false,
+        &quot;matched&quot;: 0,
+        &quot;unchecked&quot;: 0,
+        &quot;uncheckedKeys&quot;: [],
+        &quot;unmatched&quot;: 0,
+        &quot;updated&quot;: 0
+      },
+      &quot;testFilePath&quot;: &quot;G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\test\\routes.test.js&quot;,
+      &quot;testResults&quot;: [
+        {
+          &quot;ancestorTitles&quot;: [
+            &quot;User Endpoints&quot;
+          ],
+          &quot;duration&quot;: 377,
+          &quot;failureDetails&quot;: [
+            {
+              &quot;matcherResult&quot;: {
+                &quot;actual&quot;: 400,
+                &quot;expected&quot;: 201,
+                &quot;message&quot;: &quot;\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) &#x2F;&#x2F; deep equality\u001b[22m\n\nExpected: \u001b[32m201\u001b[39m\nReceived: \u001b[31m400\u001b[39m&quot;,
+                &quot;name&quot;: &quot;toEqual&quot;,
+                &quot;pass&quot;: false
+              }
+            }
+          ],
+          &quot;failureMessages&quot;: [
+            &quot;Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) &#x2F;&#x2F; deep equality\u001b[22m\n\nExpected: \u001b[32m201\u001b[39m\nReceived: \u001b[31m400\u001b[39m\n    at Object.toEqual (G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\test\\routes.test.js:13:28)\n    at processTicksAndRejections (node:internal&#x2F;process&#x2F;task_queues:96:5)&quot;
+          ],
+          &quot;fullName&quot;: &quot;User Endpoints should create a new User&quot;,
+          &quot;invocations&quot;: 1,
+          &quot;location&quot;: null,
+          &quot;numPassingAsserts&quot;: 0,
+          &quot;retryReasons&quot;: [],
+          &quot;status&quot;: &quot;failed&quot;,
+          &quot;title&quot;: &quot;should create a new User&quot;
+        }
+      ],
+      &quot;failureMessage&quot;: &quot;\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mUser Endpoints › should create a new User\u001b[39m\u001b[22m\n\n    \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) &#x2F;&#x2F; deep equality\u001b[22m\n\n    Expected: \u001b[32m201\u001b[39m\n    Received: \u001b[31m400\u001b[39m\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 11 |\u001b[39m             \u001b[32m\&quot;role\&quot;\u001b[39m\u001b[33m:\u001b[39m \u001b[32m\&quot;student\&quot;\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 12 |\u001b[39m       })\u001b[0m\u001b[22m\n\u001b[2m    \u001b[0m\u001b[31m\u001b[1m&gt;\u001b[22m\u001b[2m\u001b[39m\u001b[90m 13 |\u001b[39m     expect(res\u001b[33m.\u001b[39mstatusCode)\u001b[33m.\u001b[39mtoEqual(\u001b[35m201\u001b[39m)\u001b[0m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m    |\u001b[39m                            \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 14 |\u001b[39m     expect(res\u001b[33m.\u001b[39mbody)\u001b[33m.\u001b[39mtoHaveProperty(\u001b[32m&#39;post&#39;\u001b[39m)\u001b[0m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 15 |\u001b[39m   })\u001b[0m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 16 |\u001b[39m })\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.toEqual (\u001b[22m\u001b[2m\u001b[0m\u001b[36mtest&#x2F;routes.test.js\u001b[39m\u001b[0m\u001b[2m:13:28)\u001b[22m\u001b[2m\u001b[22m\n&quot;
+    },
+    {
+      &quot;leaks&quot;: false,
+      &quot;numFailingTests&quot;: 1,
+      &quot;numPassingTests&quot;: 0,
+      &quot;numPendingTests&quot;: 0,
+      &quot;numTodoTests&quot;: 0,
+      &quot;openHandles&quot;: [],
+      &quot;perfStats&quot;: {
+        &quot;end&quot;: 1654965736671,
+        &quot;runtime&quot;: 60550,
+        &quot;slow&quot;: true,
+        &quot;start&quot;: 1654965676121
+      },
+      &quot;skipped&quot;: false,
+      &quot;snapshot&quot;: {
+        &quot;added&quot;: 0,
+        &quot;fileDeleted&quot;: false,
+        &quot;matched&quot;: 0,
+        &quot;unchecked&quot;: 0,
+        &quot;uncheckedKeys&quot;: [],
+        &quot;unmatched&quot;: 0,
+        &quot;updated&quot;: 0
+      },
+      &quot;testFilePath&quot;: &quot;G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\test\\postAndGet.test.js&quot;,
+      &quot;testResults&quot;: [
+        {
+          &quot;ancestorTitles&quot;: [
+            &quot;POST request&quot;
+          ],
+          &quot;duration&quot;: 60026,
+          &quot;failureDetails&quot;: [
+            {},
+            {
+              &quot;message&quot;: &quot;thrown: \&quot;Exceeded timeout of 60000 ms for a test.\nUse jest.setTimeout(newTimeout) to increase the timeout value, if this is a long-running test.\&quot;&quot;
+            }
+          ],
+          &quot;failureMessages&quot;: [
+            &quot;Error: expected 201 \&quot;Created\&quot;, got 404 \&quot;Not Found\&quot;\n    at Object.expect (G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\test\\postAndGet.test.js:29:18)\n    at Promise.then.completed (G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\node_modules\\jest-circus\\build\\utils.js:323:26)\n    at new Promise (&lt;anonymous&gt;)\n    at callAsyncCircusFn (G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\node_modules\\jest-circus\\build\\utils.js:259:10)\n    at _callCircusTest (G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\node_modules\\jest-circus\\build\\run.js:277:40)\n    at _runTest (G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\node_modules\\jest-circus\\build\\run.js:209:3)\n    at _runTestsForDescribeBlock (G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\node_modules\\jest-circus\\build\\run.js:97:9)\n    at _runTestsForDescribeBlock (G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\node_modules\\jest-circus\\build\\run.js:91:9)\n----\n    at Test._assertStatus (G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\node_modules\\supertest\\lib\\test.js:252:14)\n    at G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\node_modules\\supertest\\lib\\test.js:306:17\n    at Test._assertFunction (G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\node_modules\\supertest\\lib\\test.js:285:13)\n    at Test.assert (G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\node_modules\\supertest\\lib\\test.js:164:23)\n    at localAssert (G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\node_modules\\supertest\\lib\\test.js:120:14)\n    at G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\node_modules\\supertest\\lib\\test.js:125:7\n    at Test.fn [as callback] (G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\node_modules\\superagent\\src\\node\\index.js:924:3)\n    at IncomingMessage.callback (G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\node_modules\\superagent\\src\\node\\index.js:1153:18)\n    at IncomingMessage.emit (node:events:402:35)\n    at endReadableNT (node:internal&#x2F;streams&#x2F;readable:1343:12)&quot;,
+            &quot;Error: thrown: \&quot;Exceeded timeout of 60000 ms for a test.\nUse jest.setTimeout(newTimeout) to increase the timeout value, if this is a long-running test.\&quot;\n    at it (G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\test\\postAndGet.test.js:24:4)\n    at _dispatchDescribe (G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\node_modules\\jest-circus\\build\\index.js:105:26)\n    at describe (G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\node_modules\\jest-circus\\build\\index.js:60:5)\n    at Object.describe (G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\test\\postAndGet.test.js:6:1)\n    at Runtime._execModule (G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\node_modules\\jest-runtime\\build\\index.js:1714:24)\n    at Runtime._loadModule (G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\node_modules\\jest-runtime\\build\\index.js:1223:12)\n    at Runtime.requireModule (G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\node_modules\\jest-runtime\\build\\index.js:1047:12)\n    at jestAdapter (G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapter.js:89:13)\n    at runTestInternal (G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\node_modules\\jest-runner\\build\\runTest.js:411:16)\n    at runTest (G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\node_modules\\jest-runner\\build\\runTest.js:499:34)&quot;
+          ],
+          &quot;fullName&quot;: &quot;POST request Create user data&quot;,
+          &quot;invocations&quot;: 1,
+          &quot;location&quot;: null,
+          &quot;numPassingAsserts&quot;: 0,
+          &quot;retryReasons&quot;: [],
+          &quot;status&quot;: &quot;failed&quot;,
+          &quot;title&quot;: &quot;Create user data&quot;
+        }
+      ],
+      &quot;failureMessage&quot;: &quot;\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mPOST request › Create user data\u001b[39m\u001b[22m\n\n    expected 201 \&quot;Created\&quot;, got 404 \&quot;Not Found\&quot;\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 27 |\u001b[39m                 \u001b[90m&#x2F;&#x2F;.set(&#39;Authorization&#39;, &#x60;Token $  {request.token}&#x60;) &#x2F;&#x2F;Authorization token\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 28 |\u001b[39m                 \u001b[33m.\u001b[39msend(userDetails) \u001b[90m&#x2F;&#x2F;Request header\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m    \u001b[0m\u001b[31m\u001b[1m&gt;\u001b[22m\u001b[2m\u001b[39m\u001b[90m 29 |\u001b[39m                 \u001b[33m.\u001b[39mexpect(\u001b[35m201\u001b[39m) \u001b[90m&#x2F;&#x2F;response to be 201\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m    |\u001b[39m                  \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 30 |\u001b[39m                 \u001b[33m.\u001b[39mthen((res) \u001b[33m&#x3D;&gt;\u001b[39m {\u001b[0m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 31 |\u001b[39m                     expect(res\u001b[33m.\u001b[39mbody)\u001b[33m.\u001b[39mtoBeDefined()\u001b[33m;\u001b[39m \u001b[90m&#x2F;&#x2F;test if response body is defined\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 32 |\u001b[39m                     \u001b[90m&#x2F;&#x2F;expect(res.body.status).toBe(\&quot;success\&quot;)\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.expect (\u001b[22m\u001b[2m\u001b[0m\u001b[36mtest&#x2F;postAndGet.test.js\u001b[39m\u001b[0m\u001b[2m:29:18)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      ----\u001b[22m\n\u001b[2m      \u001b[2mat Test._assertStatus (\u001b[22m\u001b[2m\u001b[0m\u001b[36mnode_modules&#x2F;supertest&#x2F;lib&#x2F;test.js\u001b[39m\u001b[0m\u001b[2m:252:14)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat \u001b[22m\u001b[2m\u001b[0m\u001b[36mnode_modules&#x2F;supertest&#x2F;lib&#x2F;test.js\u001b[39m\u001b[0m\u001b[2m:306:17\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Test._assertFunction (\u001b[22m\u001b[2m\u001b[0m\u001b[36mnode_modules&#x2F;supertest&#x2F;lib&#x2F;test.js\u001b[39m\u001b[0m\u001b[2m:285:13)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Test.assert (\u001b[22m\u001b[2m\u001b[0m\u001b[36mnode_modules&#x2F;supertest&#x2F;lib&#x2F;test.js\u001b[39m\u001b[0m\u001b[2m:164:23)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat localAssert (\u001b[22m\u001b[2m\u001b[0m\u001b[36mnode_modules&#x2F;supertest&#x2F;lib&#x2F;test.js\u001b[39m\u001b[0m\u001b[2m:120:14)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat \u001b[22m\u001b[2m\u001b[0m\u001b[36mnode_modules&#x2F;supertest&#x2F;lib&#x2F;test.js\u001b[39m\u001b[0m\u001b[2m:125:7\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Test.fn [as callback] (\u001b[22m\u001b[2mnode_modules&#x2F;superagent&#x2F;src&#x2F;node&#x2F;index.js\u001b[2m:924:3)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat IncomingMessage.callback (\u001b[22m\u001b[2mnode_modules&#x2F;superagent&#x2F;src&#x2F;node&#x2F;index.js\u001b[2m:1153:18)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mPOST request › Create user data\u001b[39m\u001b[22m\n\n    thrown: \&quot;Exceeded timeout of 60000 ms for a test.\n    Use jest.setTimeout(newTimeout) to increase the timeout value, if this is a long-running test.\&quot;\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 22 |\u001b[39m     })\u001b[33m;\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 23 |\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m    \u001b[0m\u001b[31m\u001b[1m&gt;\u001b[22m\u001b[2m\u001b[39m\u001b[90m 24 |\u001b[39m \t  it(\u001b[32m\&quot;Create user data\&quot;\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m done \u001b[33m&#x3D;&gt;\u001b[39m {\u001b[0m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m    |\u001b[39m \t  \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 25 |\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 26 |\u001b[39m         \u001b[36mreturn\u001b[39m request\u001b[33m.\u001b[39mrequest\u001b[33m.\u001b[39mpost(\u001b[32m&#x60;&#x2F;api&#x2F;auth&#x2F;signup&#x60;\u001b[39m) \u001b[90m&#x2F;&#x2F;post() of supertest\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 27 |\u001b[39m                 \u001b[90m&#x2F;&#x2F;.set(&#39;Authorization&#39;, &#x60;Token $  {request.token}&#x60;) &#x2F;&#x2F;Authorization token\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat it (\u001b[22m\u001b[2m\u001b[0m\u001b[36mtest&#x2F;postAndGet.test.js\u001b[39m\u001b[0m\u001b[2m:24:4)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.describe (\u001b[22m\u001b[2m\u001b[0m\u001b[36mtest&#x2F;postAndGet.test.js\u001b[39m\u001b[0m\u001b[2m:6:1)\u001b[22m\u001b[2m\u001b[22m\n&quot;
+    },
+    {
+      &quot;leaks&quot;: false,
+      &quot;numFailingTests&quot;: 0,
+      &quot;numPassingTests&quot;: 1,
+      &quot;numPendingTests&quot;: 0,
+      &quot;numTodoTests&quot;: 0,
+      &quot;openHandles&quot;: [],
+      &quot;perfStats&quot;: {
+        &quot;end&quot;: 1654965737123,
+        &quot;runtime&quot;: 352,
+        &quot;slow&quot;: false,
+        &quot;start&quot;: 1654965736771
+      },
+      &quot;skipped&quot;: false,
+      &quot;snapshot&quot;: {
+        &quot;added&quot;: 0,
+        &quot;fileDeleted&quot;: false,
+        &quot;matched&quot;: 0,
+        &quot;unchecked&quot;: 0,
+        &quot;uncheckedKeys&quot;: [],
+        &quot;unmatched&quot;: 0,
+        &quot;updated&quot;: 0
+      },
+      &quot;testFilePath&quot;: &quot;G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\test\\sample.test.js&quot;,
+      &quot;testResults&quot;: [
+        {
+          &quot;ancestorTitles&quot;: [
+            &quot;Sample Test&quot;
+          ],
+          &quot;duration&quot;: 7,
+          &quot;failureDetails&quot;: [],
+          &quot;failureMessages&quot;: [],
+          &quot;fullName&quot;: &quot;Sample Test should test that true &#x3D;&#x3D;&#x3D; true&quot;,
+          &quot;invocations&quot;: 1,
+          &quot;location&quot;: null,
+          &quot;numPassingAsserts&quot;: 0,
+          &quot;retryReasons&quot;: [],
+          &quot;status&quot;: &quot;passed&quot;,
+          &quot;title&quot;: &quot;should test that true &#x3D;&#x3D;&#x3D; true&quot;
+        }
+      ],
+      &quot;failureMessage&quot;: null
+    }
+  ],
+  &quot;wasInterrupted&quot;: false
+}</div>
+        </div>
+        <div class="d-none" id="test-global-config">{
+  &quot;bail&quot;: 0,
+  &quot;changedFilesWithAncestor&quot;: false,
+  &quot;ci&quot;: false,
+  &quot;collectCoverage&quot;: true,
+  &quot;collectCoverageFrom&quot;: [],
+  &quot;coverageDirectory&quot;: &quot;G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\coverage&quot;,
+  &quot;coverageProvider&quot;: &quot;babel&quot;,
+  &quot;coverageReporters&quot;: [
+    &quot;json&quot;,
+    &quot;text&quot;,
+    &quot;lcov&quot;,
+    &quot;clover&quot;
+  ],
+  &quot;detectLeaks&quot;: false,
+  &quot;detectOpenHandles&quot;: true,
+  &quot;errorOnDeprecated&quot;: false,
+  &quot;expand&quot;: false,
+  &quot;findRelatedTests&quot;: false,
+  &quot;forceExit&quot;: false,
+  &quot;json&quot;: false,
+  &quot;lastCommit&quot;: false,
+  &quot;listTests&quot;: false,
+  &quot;logHeapUsage&quot;: false,
+  &quot;maxConcurrency&quot;: 5,
+  &quot;maxWorkers&quot;: 1,
+  &quot;noStackTrace&quot;: false,
+  &quot;nonFlagArgs&quot;: [],
+  &quot;notify&quot;: false,
+  &quot;notifyMode&quot;: &quot;failure-change&quot;,
+  &quot;onlyChanged&quot;: false,
+  &quot;onlyFailures&quot;: false,
+  &quot;passWithNoTests&quot;: false,
+  &quot;projects&quot;: [],
+  &quot;reporters&quot;: [
+    [
+      &quot;default&quot;,
+      {}
+    ],
+    [
+      &quot;G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\node_modules\\jest-stare\\lib\\index.js&quot;,
+      {}
+    ]
+  ],
+  &quot;rootDir&quot;: &quot;G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master&quot;,
+  &quot;runTestsByPath&quot;: false,
+  &quot;skipFilter&quot;: false,
+  &quot;testFailureExitCode&quot;: 1,
+  &quot;testPathPattern&quot;: &quot;&quot;,
+  &quot;testSequencer&quot;: &quot;G:\\Portfolio\\Session Demos\\GPT-H\\node-js-jwt-auth-master\\node_modules\\@jest\\test-sequencer\\build\\index.js&quot;,
+  &quot;testTimeout&quot;: 60000,
+  &quot;updateSnapshot&quot;: &quot;new&quot;,
+  &quot;useStderr&quot;: false,
+  &quot;watch&quot;: false,
+  &quot;watchAll&quot;: false,
+  &quot;watchman&quot;: true
+}</div>
+
+    </main>
+    <hr>
+    <footer class="footer">
+        <div class="container">
+            <span class="text-muted">jest-stare 2022</span>
+        </div>
+    </footer>
+</body>
+
+</html>
+
