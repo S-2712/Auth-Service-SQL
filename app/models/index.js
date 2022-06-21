@@ -6,7 +6,7 @@ const sequelize = new Sequelize(
   config.USER,
   config.PASSWORD,
   {
-    host: config.HOST,
+    host: config.HOST || env.HOST,
     dialect: config.dialect,
     operatorsAliases: false,
 
