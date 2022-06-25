@@ -1,7 +1,7 @@
 module.exports = {
   HOST: "authservice.ckrsy3hwduss.ap-south-1.rds.amazonaws.com",
-  USER: "root",
-  PASSWORD: "root1234",
+  USER: "gpth",
+  PASSWORD: "gpth123",
   DB: "hometute",
   dialect: "mysql",
   pool: {

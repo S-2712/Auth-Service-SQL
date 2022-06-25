@@ -4,6 +4,7 @@
   "description": "Node.js Demo for JWT Authentication",
   "main": "server.js",
   "scripts": {
+    "start" : " node swagger.js ",
     "test": " jest --reporters default jest-stare --coverage --detectOpenHandles --runInBand --testTimeout=60000"
   },
   "jest": {
