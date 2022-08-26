@@ -9,6 +9,7 @@ For more detail, please visit:
 > [Node.js JWT Authentication & Authorization example](https://bezkoder.com/node-js-jwt-authentication-mysql/)
 
 You may need to implement Refresh Token:
+sample
 
 ![jwt-refresh-token-node-js-example-flow](jwt-refresh-token-node-js-example-flow.png)
 
