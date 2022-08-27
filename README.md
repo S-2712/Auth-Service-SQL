@@ -7,6 +7,7 @@ The diagram shows flow of how we implement User Registration, User Login and Aut
 
 For more detail, please visit:
 > [Node.js JWT Authentication & Authorization example](https://bezkoder.com/node-js-jwt-authentication-mysql/)
+sample 10
 
 You may need to implement Refresh Token:
 sample
